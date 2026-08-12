@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rpkg.dev/schemas/1.0/character.schema.json",
+  "title": "RPKG 1.0 character",
+  "type": "object",
+  "required": ["id", "lastUpdate", "name", "definition", "greetings", "tagline", "avatar"],
+  "properties": {
+    "id": {"$ref": "manifest.schema.json#/$defs/id"},
+    "lastUpdate": {"type": "number"},
+    "name": {"type": "string"},
+    "definition": {"type": "string"},
+    "greetings": {"type": "array", "items": {"type": "string"}},
+    "tagline": {"type": "string"},
+    "avatar": {"type": ["string", "null"], "pattern": "^data:"},
+    "metadata": {"$ref": "manifest.schema.json#/$defs/metadata"}
+  },
+  "additionalProperties": true
+}

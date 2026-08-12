@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rpkg.dev/schemas/1.0/lorebook.schema.json",
+  "title": "RPKG 1.0 lorebook",
+  "type": "object",
+  "required": ["id", "lastUpdate", "name", "entries"],
+  "properties": {
+    "id": {"$ref": "manifest.schema.json#/$defs/id"},
+    "lastUpdate": {"type": "number"},
+    "name": {"type": "string"},
+    "metadata": {"$ref": "manifest.schema.json#/$defs/metadata"},
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "content"],
+        "properties": {
+          "id": {"$ref": "manifest.schema.json#/$defs/id"},
+          "name": {"type": "string"},
+          "content": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
