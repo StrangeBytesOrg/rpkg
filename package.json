@@ -12,8 +12,7 @@
         "check": "tsc -p packages/core/tsconfig.json && tsc -p packages/cli/tsconfig.json",
         "fmt": "oxfmt package.json packages oxfmt.config.ts oxlint.config.ts",
         "lint": "oxlint packages",
-        "lint:fix": "oxlint --fix --fix-suggestions packages",
-        "test": "bun run --filter '*' test"
+        "lint:fix": "oxlint --fix --fix-suggestions packages"
     },
     "devDependencies": {
         "@types/bun": "latest",
