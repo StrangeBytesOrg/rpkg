@@ -1,0 +1,29 @@
+name: Release CLI
+
+on:
+    push:
+        tags:
+            - 'v*'
+
+permissions:
+    contents: write
+
+jobs:
+    release:
+        name: Build and publish GitHub release
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: oven-sh/setup-bun@v2
+            - run: bun install --frozen-lockfile
+            - run: bun run check
+            - name: Cross-compile release assets
+              run: |
+                  mkdir -p release
+                  bun build ./packages/cli/src/index.ts --compile --target=bun-linux-x64 --outfile ./release/rpkg-linux
+                  bun build ./packages/cli/src/index.ts --compile --target=bun-darwin-x64 --outfile ./release/rpkg-macos
+                  bun build ./packages/cli/src/index.ts --compile --target=bun-windows-x64 --outfile ./release/rpkg-windows
+            - uses: softprops/action-gh-release@v2
+              with:
+                  generate_release_notes: true
+                  files: release/*
