@@ -23,6 +23,24 @@ jobs:
                   bun build ./packages/cli/src/index.ts --compile --target=bun-linux-x64 --outfile ./release/rpkg-linux
                   bun build ./packages/cli/src/index.ts --compile --target=bun-darwin-x64 --outfile ./release/rpkg-macos
                   bun build ./packages/cli/src/index.ts --compile --target=bun-windows-x64 --outfile ./release/rpkg-windows
+            - name: Download UPX
+              run: |
+                  upx_dir="$RUNNER_TEMP/upx"
+                  mkdir -p "$upx_dir"
+                  curl -L --fail --silent --show-error --output "$upx_dir/upx.tar.xz" https://github.com/upx/upx/releases/download/v5.0.2/upx-5.0.2-amd64_linux.tar.xz
+                  printf '%s  %s\n' ddc2654063fe4dc80d95b420788494e4db078ebb01a650692d623b5a9906e61e "$upx_dir/upx.tar.xz" > "$upx_dir/SHA256SUMS"
+                  sha256sum --check "$upx_dir/SHA256SUMS"
+                  tar -xJf "$upx_dir/upx.tar.xz" --directory "$upx_dir"
+            - name: Pack Linux and Windows assets
+              run: |
+                  upx="$RUNNER_TEMP/upx/upx-5.0.2-amd64_linux/upx"
+                  "$upx" -7 --no-progress release/rpkg-linux release/rpkg-windows.exe
+            - name: Create Windows and macOS archives
+              run: |
+                  cd release
+                  zip rpkg-windows.zip rpkg-windows.exe
+                  zip rpkg-macos.zip rpkg-macos
+                  rm rpkg-windows.exe rpkg-macos
             - uses: softprops/action-gh-release@v2
               with:
                   generate_release_notes: true
